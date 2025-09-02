@@ -3,7 +3,7 @@
 
 ## Descripción del Proyecto
 
-Este proyecto tiene como objetivo evolucionar un servidor web básico —capaz actualmente de servir archivos HTML, CSS, JavaScript e imágenes— en un framework web ligero y funcional., el cual permite:
+Este proyecto tiene como objetivo evolucionar un servidor web básico para servir archivos HTML, CSS, JavaScript e imágenes en un framework web ligero y funcional., el cual permite:
 
 - El proyecto incluye la implementación de un servidor HTTP sencillo utilizando Java Sockets, lo que permite gestionar directamente las conexiones y solicitudes web.
 - El servidor puede responder solicitudes de archivos como páginas HTML, hojas de estilo CSS, scripts JavaScript e imágenes PNG
