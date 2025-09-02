@@ -5,12 +5,9 @@
 
 Este proyecto tiene como objetivo evolucionar un servidor web básico —capaz actualmente de servir archivos HTML, CSS, JavaScript e imágenes— en un framework web ligero y funcional., el cual permite:
 
-- Definir servicios REST utilizando funciones lambda.
-
-- Procesar parámetros de consulta dentro de las solicitudes.
-
----
-
+- El proyecto incluye la implementación de un servidor HTTP sencillo utilizando Java Sockets, lo que permite gestionar directamente las conexiones y solicitudes web.
+- El servidor puede responder solicitudes de archivos como páginas HTML, hojas de estilo CSS, scripts JavaScript e imágenes PNG
+- El sistema permite registrar objetos Java (POJOs) como controladores web mediante el uso de anotaciones propias
 ## Instrucciones 
 
 ### Requisitos
@@ -24,8 +21,8 @@ Este proyecto tiene como objetivo evolucionar un servidor web básico —capaz a
 ### Instalación
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/YulienCC2512/Taller_2_AREP.git
-cd Taller_2_Arep
+git clone https://github.com/YulienCC2512/Taller3_AREP.git
+cd Taller3_AREP
 ```
  ### Uso
 
@@ -40,8 +37,8 @@ Esto cargará el archivo www/index.html.
 
 Ejemplos:
 ```bash
-http://localhost:35000/style.css 
-http://localhost:35000/image.png 
+http://localhost:35000/greeting
+http://localhost:35000/greeting?name=Pepito 
 ```
 
 ---

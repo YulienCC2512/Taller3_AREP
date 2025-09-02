@@ -1,12 +1,19 @@
-package main.java.com.mycompany.ejercicio1;
+package com.mycompany.ejercicio1;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import jaa.lang.annotation.RetentionPolicy;
-import java.lang,annotation.Target;
+import java.lang.annotation.*;
 
-
-@Retention(RetetntionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface RestController {
-}
+/**
+ * Anotación personalizada que marca una clase como un controlador REST.
+ *
+ * Esta anotación actúa de forma similar a la de Spring Boot (@RestController),
+ * indicando que la clase está destinada a manejar solicitudes HTTP.
+ *
+ * Uso:
+ *
+ * @RestController
+ * public class MiControlador {
+ *     // Métodos que manejarán endpoints
+ * }
+ */
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RestController {}

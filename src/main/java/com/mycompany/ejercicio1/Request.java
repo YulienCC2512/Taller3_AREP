@@ -1,75 +1,55 @@
-package main.java.com.mycompany.ejercicio1;
+package com.mycompany.ejercicio1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
-/**
- * Representa una petición HTTP (simplificada).
- * Julian Santiago Cardenas
- */
 public class Request {
 
-    private String method;
-    private String path;
-    private Map<String, String> headers;
-    private String body;
+    private final String method;
+    private final String rawPath;
+    private final String path;
+    private final Map<String, List<String>> queryParams = new HashMap<>();
 
-    public Request(String method, String path, Map<String, String> headers, String body) {
+    public Request(String method, String rawPath) {
         this.method = method;
-        this.path = path;
-        this.headers = headers;
-        this.body = body;
-    }
+        this.rawPath = (rawPath == null || rawPath.isEmpty()) ? "/" : rawPath;
 
-    public String getMethod() {
-        return method;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-
-    public static Request build(BufferedReader in) throws IOException {
-
-        String inputLine = in.readLine();
-        if (inputLine == null || inputLine.isEmpty()) {
-            // Si no hay request, devolvemos un request por defecto a "/"
-            return new Request("GET", "/", new HashMap<>(), "");
+        int queryIndex = this.rawPath.indexOf('?');
+        if (queryIndex >= 0) {
+            this.path = this.rawPath.substring(0, queryIndex);
+            String query = this.rawPath.substring(queryIndex + 1);
+            parseQueryString(query, queryParams);
+        } else {
+            this.path = this.rawPath;
         }
+    }
 
-        String[] requestParts = inputLine.split(" ");
-        String method = requestParts[0];
-        String path = requestParts.length > 1 ? requestParts[1] : "/";
-
-
-        Map<String, String> headers = new HashMap<>();
-        String line;
-        while ((line = in.readLine()) != null && !line.isEmpty()) {
-            String[] headerParts = line.split(":", 2);
-            if (headerParts.length == 2) {
-                headers.put(headerParts[0].trim(), headerParts[1].trim());
-            }
+    private static void parseQueryString(String query, Map<String, List<String>> target) {
+        if (query == null || query.isBlank()) {
+            return;
         }
+        Arrays.stream(query.split("&"))
+                .filter(segment -> !segment.isEmpty())
+                .forEach(segment -> {
+                    int idx = segment.indexOf('=');
+                    String key = (idx >= 0) ? segment.substring(0, idx) : segment;
+                    String value = (idx >= 0) ? segment.substring(idx + 1) : "";
+                    target.computeIfAbsent(decode(key), k -> new ArrayList<>()).add(decode(value));
+                });
+    }
 
-        String body = "";
-        if (headers.containsKey("Content-Length")) {
-            int length = Integer.parseInt(headers.get("Content-Length"));
-            char[] buffer = new char[length];
-            in.read(buffer, 0, length);
-            body = new String(buffer);
-        }
+    private static String decode(String value) {
+        return URLDecoder.decode(value.replace("+", " "), StandardCharsets.UTF_8);
+    }
 
-        return new Request(method, path, headers, body);
+    public String getValue(String key) {
+        List<String> values = queryParams.get(key);
+        return (values == null || values.isEmpty()) ? null : values.get(0);
+    }
+
+    public List<String> getValues(String key) {
+        List<String> values = queryParams.get(key);
+        return (values == null) ? List.of() : List.copyOf(values);
     }
 }

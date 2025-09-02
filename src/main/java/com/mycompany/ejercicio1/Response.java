@@ -1,35 +1,43 @@
-package main.java.com.mycompany.ejercicio1;
+package com.mycompany.ejercicio1;
 
-import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+
 public class Response {
-    private PrintWriter out;
-    private BufferedOutputStream dataOut;
 
-    public Response(PrintWriter out, BufferedOutputStream dataOut) {
-        this.out = out;
-        this.dataOut = dataOut;
+    private int status = 200;
+
+    private String contentType = "text/plain; charset=UTF-8";
+
+    private byte[] body = new byte[0];
+
+    public int getStatus() {
+        return status;
     }
 
-    public void send(int status, String contentType, String content) throws IOException {
-        byte[] data = content.getBytes(StandardCharsets.UTF_8);
-        send(status, contentType, data);
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public void send(int status, String contentType, byte[] data) throws IOException {
-        out.println("HTTP/1.1 " + status + " " );
-        out.println("Content-Type: " + contentType);
-        out.println("Content-Length: " + data.length);
-        out.println();
-        out.flush();
-
-        dataOut.write(data, 0, data.length);
-        dataOut.flush();
+    public String getContentType() {
+        return contentType;
     }
 
-    public void close() throws IOException {
-        out.close();
-        dataOut.close();
+    public void setContentType(String ct) {
+        this.contentType = ct;
+    }
+
+    public byte[] getBodyBytes() {
+        return body;
+    }
+
+    public void setBody(String s) {
+        contentType = "text/plain; charset=UTF-8";
+        body = (s == null) ? new byte[0] : s.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public void setBodyBytes(String ct, byte[] data) {
+        contentType = (ct == null) ? "application/octet-stream" : ct;
+        body = (data == null) ? new byte[0] : data;
     }
 }
